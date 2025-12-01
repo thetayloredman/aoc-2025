@@ -1,0 +1,60 @@
+// Copyright (C) 2025 Logan "LogN" Devine <logan@zirco.dev>
+// Advent of Code 2025 - Day 1, Part 2 - Zirco Solution
+// This software is licensed under the MIT License. See the LICENSE file for details.
+
+#include <stdlib.zh>
+#include <stdio.zh>
+
+fn fgets(str: *u8, len: i32, str: *FILE) -> *u8; // not in stdio
+
+enum Turn {
+    Left: i32,
+    Right: i32,
+}
+
+fn normalizeDirection(t: Turn) -> i32 {
+    match (t) {
+        Left: n => return -n;
+        Right: n => return n;
+    }
+
+    unreachable; // zrc#451
+}
+
+
+
+fn main() -> i32 {
+    let input = fopen("./input.txt", "r");
+
+    let pos = 50;
+    let zeroes = 0;
+
+    // a line won't be longer than 10 chars
+    let line = malloc(10) as *u8;
+    while (fgets(line, 10, input) as i32 != 0) {
+        // line will be L/R then a number then \n
+        // we don't technically need to parse it like this but it's a fun demo of enums
+        let t: Turn;
+        if (line[0] == 'L') {
+            let num = atoi(line + 1);
+            t = new Turn { Left: num };
+        } else if (line[0] == 'R') {
+            let num = atoi(line + 1);
+            t = new Turn { Right: num };
+        }
+
+        // ---
+
+        let dirChange = normalizeDirection(t);
+
+        pos += dirChange;
+        pos %= 100;
+
+        if (pos == 0) zeroes++;
+    }
+
+    fclose(input);
+
+    printf("Solution: %d\n", zeroes);
+    return 0;
+}

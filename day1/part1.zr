@@ -29,7 +29,8 @@ fn main() -> i32 {
     let pos = 50;
     let zeroes = 0;
 
-    // a line won't be longer than 10 chars
+    // a line definitely won't ever be longer than 10 chars
+    // if it is .. oops
     let line = malloc(10) as *u8;
     while (fgets(line, 10, input) as i32 != 0) {
         // line will be L/R then a number then \n
